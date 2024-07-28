@@ -7,6 +7,7 @@ import cors from "cors"
 
 import { mongoDbConnection } from "./config/mongodb.js";
 import categoryRouter from "./routes/category.js"; 
+import productRouter from "./routes/product.js"
 
 // enviroment variable
 dotenv.config();
@@ -34,6 +35,7 @@ app.use(express.static("public"));
 
 // routes 
 app.use("/api/v1/category", categoryRouter); 
+app.use("/api/v1/product", productRouter); 
 
 
 // listen server

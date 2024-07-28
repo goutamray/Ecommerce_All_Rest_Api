@@ -10,6 +10,7 @@ const storage = multer.diskStorage({
 
 // multer middleware
 export const categoryPhotoMulter = multer({ storage }).single("photo");
+export const productPhotoMulter = multer({ storage }).single("photo");
 
 
 

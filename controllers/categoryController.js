@@ -1,7 +1,9 @@
 
 import asyncHandler from "express-async-handler";
 import Category from "../models/Category.js";
-import { fileDeleteFromCloud, fileUploadToCloud } from "../utilis/cloudinary.js";
+import { 
+        fileDeleteFromCloud, 
+        fileUploadToCloud } from "../utilis/cloudinary.js";
 import { findPublicId } from "../helpers/helpers.js";
 
 /**
@@ -75,7 +77,7 @@ export const createCategory = asyncHandler(async(req, res) => {
      const newCategory = await Category.create({ name, color, photo : filedata  });
 
     // save data 
-    return res.status(200).json({ category : newCategory,  message : "Category Created Successfull"})
+    return res.status(201).json({ category : newCategory,  message : "Category Created Successfull"})
 })
 
 
@@ -98,7 +100,6 @@ export const deleteCategory = asyncHandler(async(req, res) => {
        return res.status(404).json({ message : "Category not found" })
      }
 
-
      // delete cloud file
       await fileDeleteFromCloud(findPublicId(category.photo));
 
@@ -120,10 +121,19 @@ export const updateCategory = asyncHandler(async(req, res) => {
    // get form data 
    const { name, color } = req.body;
 
+
+  // photo manage 
+  let filedata = null;
+
+  if(req.file){
+    const data = await fileUploadToCloud(req.file.path)
+    filedata = data.secure_url;
+  }; 
+
  // update category
   const categoryUpdate = await Category.findByIdAndUpdate(
     id, 
-    { name, color }, 
+    { name, color, photo : filedata }, 
     {new : true});
 
    

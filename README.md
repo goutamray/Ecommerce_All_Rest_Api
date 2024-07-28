@@ -8,7 +8,7 @@
 ## Setup
 
 ```
-git clone 
+git clone https://github.com/goutamray/Ecommerce_product_and_category_api.git
 .env 
 PORT
 MONGO_URL 
@@ -17,4 +17,8 @@ MONGO_URL
 npm install
 npm run dev
 ```
+
+
+
+
 
