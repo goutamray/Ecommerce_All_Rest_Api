@@ -14,12 +14,10 @@ const productSchema = mongoose.Schema({
     trim : true,
     required : true,
   }, 
-  photo : [
-    {
+  photo : {
      type : String,
      required : true, 
    },
- ],
   brand : {
     type: String,
     trim : true,

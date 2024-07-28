@@ -119,9 +119,11 @@ export const deleteProduct = asyncHandler(async(req, res) => {
      }
 
      // delete cloud file
-      await fileDeleteFromCloud(findPublicId(product.photo));
+     const photoUrl = product.photo;
 
-  return res.status(200).json({ product,  message : "Product Deleted Successfull"})
+     await fileDeleteFromCloud(findPublicId(photoUrl));
+
+  return res.status(200).json({ product,  message : "Product Deleted Successfully"})
 });  
 
  
