@@ -1,12 +1,12 @@
 
 import asyncHandler from "express-async-handler";
 
-import Product from "../models/Product.js";
-import Category from "../models/Category.js";
-import { fileDeleteFromCloud, fileUploadToCloud } from "../utilis/cloudinary.js";
 import { findPublicId } from "../helpers/helpers.js";
+import Category from "../models/Category.js";
+import Product from "../models/Product.js";
+import { fileDeleteFromCloud, fileUploadToCloud } from "../utilis/cloudinary.js";
 
-
+ 
 /**
  * @DESC GET ALL PRODUCT 
  * @METHOD GET
@@ -73,11 +73,10 @@ export const createProduct = asyncHandler(async(req, res) => {
           category,
           countInStock, 
           rating, 
-          numReviews,
           isFeatured  } = req.body; 
 
     // validation
-  if (!name || !description || !category || !numReviews) {
+  if (!name || !description || !category || !price) {
     return res.status(400).json({ message : "All fields are Required" })
   };
 
@@ -90,7 +89,7 @@ export const createProduct = asyncHandler(async(req, res) => {
   };  
 
   // create product 
-  const newProduct = await Product.create({ name, description, brand, price, category, countInStock, rating, numReviews, isFeatured, photo : filedata  });
+  const newProduct = await Product.create({ name, description, brand, price, category, countInStock, rating, isFeatured, photo : filedata  });
 
 
    return res.status(201).json({ newProduct,  message : "Product created Successfull"});
@@ -146,7 +145,6 @@ export const updateProduct = asyncHandler(async(req, res) => {
     category,
     countInStock, 
     rating, 
-    numReviews,
     isFeatured  } = req.body; 
 
 
@@ -168,8 +166,9 @@ export const updateProduct = asyncHandler(async(req, res) => {
       category,
       countInStock, 
       rating, 
-      numReviews,
-      isFeatured , photo : filedata }, 
+      isFeatured , 
+      photo : filedata 
+    }, 
     {new : true});
 
    

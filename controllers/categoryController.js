@@ -24,7 +24,7 @@ export const getAllCategory = asyncHandler(async(req, res) => {
         message : "Categories Not Found" });
     }
 
-  return res.status(200).json({ categoryList: categoryList,  message : "Get All Category"});
+  return res.status(200).json({ categoryList,  message : "Get All Category"});
 });
 
 
@@ -130,6 +130,7 @@ export const updateCategory = asyncHandler(async(req, res) => {
     filedata = data.secure_url;
   }; 
 
+  
  // update category
   const categoryUpdate = await Category.findByIdAndUpdate(
     id, 

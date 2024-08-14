@@ -6,7 +6,6 @@ const categorySchema = mongoose.Schema({
   name : {
     type: String,
     trim : true,
-    required : true,
   },
   photo : {
     type : String,
@@ -16,7 +15,7 @@ const categorySchema = mongoose.Schema({
   color : {
     type : String,
     required : true,
-  }
+  } 
 },
 {
   timestamps : true,

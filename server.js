@@ -25,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extends : false }));
 app.use(bodyParser.json()); 
 app.use(cors({
-  origin : "http://localhost:3000",
+  origin : "http://localhost:3001",
   credentials : true,
 }));
 
@@ -41,7 +41,7 @@ app.use("/api/v1/product", productRouter);
 // listen server
 app.listen(PORT, () => {
   mongoDbConnection(),
-  console.log(`Server is running on port ${PORT}`.bgGreen.black);
+  console.log(` Server is running on port ${PORT} `.bgGreen.black);
 })
 
 
