@@ -1,17 +1,15 @@
-
-import express from "express";
-import colors from "colors";
 import dotenv from "dotenv";
-import bodyParser from "body-parser";
-import cors from "cors" 
-
+import express from "express";
+import colors from "colors"; 
 import { mongoDbConnection } from "./config/mongodb.js";
-import categoryRouter from "./routes/category.js"; 
-import productRouter from "./routes/product.js"
+import { errorHandler } from "./middlewares/errorHandler.js";
+import categoryRouter from "./routes/category.js";
+import productRouter from "./routes/product.js";
+import cors from "cors";
+import bodyParser from "body-parser";
 
 // enviroment variable
 dotenv.config();
-
 
 // port config
 const PORT = process.env.PORT || 6060 
@@ -37,11 +35,14 @@ app.use(express.static("public"));
 app.use("/api/v1/category", categoryRouter); 
 app.use("/api/v1/product", productRouter); 
 
+// error handler 
+app.use(errorHandler); 
+
 
 // listen server
 app.listen(PORT, () => {
   mongoDbConnection(),
-  console.log(` Server is running on port ${PORT} `.bgGreen.black);
+  console.log(` Server is running on port ${PORT}`.bgGreen.black);
 })
 
 
