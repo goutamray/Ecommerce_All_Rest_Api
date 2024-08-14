@@ -12,12 +12,13 @@ const productSchema = mongoose.Schema({
   description : {
     type: String,
     trim : true,
-    required : true,
   }, 
-  photo : {
-     type : String,
-     required : true, 
-   },
+  photo : [
+    {
+      type : String,
+      required : true, 
+    }
+  ],
   brand : {
     type: String,
     trim : true,
@@ -27,14 +28,17 @@ const productSchema = mongoose.Schema({
     type : Number,
     default : 0, 
   }, 
+  oldPrice : {
+    type : Number,
+    default : 0, 
+  }, 
   category : {
     type : mongoose.Schema.Types.ObjectId,
     ref : "Category",
-    required : true, 
   }, 
   countInStock : {
     type : Number,
-    required : true, 
+    default : 0,
   }, 
   rating : {
     type : Number,

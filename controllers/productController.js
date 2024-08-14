@@ -58,7 +58,6 @@ export const getSingleProduct = asyncHandler(async(req, res) => {
  * 
  */
 export const createProduct = asyncHandler(async(req, res) => {
-  
   const categoryData = await Category.findById(req.body.category);
 
   // check category  
@@ -70,26 +69,40 @@ export const createProduct = asyncHandler(async(req, res) => {
           description,
           brand,
           price,
+          oldPrice,
           category,
           countInStock, 
           rating, 
           isFeatured  } = req.body; 
 
     // validation
-  if (!name || !description || !category || !price) {
+  if (!name || !description || !price) {
     return res.status(400).json({ message : "All fields are Required" })
   };
 
-  // photo manage 
-  let filedata = null;
+    // Handle multiple file uploads
+    let filedata = [];
 
-  if(req.file){
-   const data = await fileUploadToCloud(req.file.path)
-   filedata = data.secure_url;
-  };  
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const data = await fileUploadToCloud(file.path);
+        filedata.push(data.secure_url);
+      }
+    }
 
   // create product 
-  const newProduct = await Product.create({ name, description, brand, price, category, countInStock, rating, isFeatured, photo : filedata  });
+  const newProduct = await Product.create({ 
+    name, 
+    description, 
+    brand, 
+    price, 
+    oldPrice,
+    category, 
+    countInStock, 
+    rating, 
+    isFeatured, 
+    photo : filedata  
+  });
 
 
    return res.status(201).json({ newProduct,  message : "Product created Successfull"});
@@ -138,10 +151,12 @@ export const updateProduct = asyncHandler(async(req, res) => {
   const { id } = req.params;
 
    // get form data 
-   const { name,
+   const { 
+    name,
     description,
     brand,
     price,
+    oldPrice,
     category,
     countInStock, 
     rating, 
@@ -163,6 +178,7 @@ export const updateProduct = asyncHandler(async(req, res) => {
       description,
       brand,
       price,
+      oldPrice,
       category,
       countInStock, 
       rating, 
