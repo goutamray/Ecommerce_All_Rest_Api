@@ -21,7 +21,7 @@ router.delete("/:id", deleteCategory);  // delete category
 router.patch("/:id", categoryPhotoMulter, updateCategory);   // update category 
 
 
-// export defult router 
+// export default router 
 export default router;
 
 

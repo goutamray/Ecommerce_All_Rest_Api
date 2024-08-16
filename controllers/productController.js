@@ -73,7 +73,10 @@ export const createProduct = asyncHandler(async(req, res) => {
           category,
           countInStock, 
           rating, 
-          isFeatured  } = req.body; 
+          isFeatured,
+          } = req.body; 
+
+       
 
     // validation
   if (!name || !description || !price) {

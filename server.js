@@ -4,6 +4,7 @@ import colors from "colors";
 import { mongoDbConnection } from "./config/mongodb.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
 import categoryRouter from "./routes/category.js";
+import brandRouter from "./routes/brand.js";
 import productRouter from "./routes/product.js";
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -34,6 +35,7 @@ app.use(express.static("public"));
 // routes 
 app.use("/api/v1/category", categoryRouter); 
 app.use("/api/v1/product", productRouter); 
+app.use("/api/v1/brand", brandRouter); 
 
 // error handler 
 app.use(errorHandler); 
