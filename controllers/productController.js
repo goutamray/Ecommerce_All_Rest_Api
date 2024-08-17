@@ -166,13 +166,15 @@ export const updateProduct = asyncHandler(async(req, res) => {
     isFeatured  } = req.body; 
 
 
-  // photo manage 
-  let filedata = null;
+    // Handle multiple file uploads
+    let filedata = [];
 
-  if(req.file){
-    const data = await fileUploadToCloud(req.file.path)
-    filedata = data.secure_url;
-  }; 
+    if (req.files && req.files.length > 0) {
+      for (const file of req.files) {
+        const data = await fileUploadToCloud(file.path);
+        filedata.push(data.secure_url);
+      }
+    } 
 
  // update product
   const productUpdate = await Product.findByIdAndUpdate(

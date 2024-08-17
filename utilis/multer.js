@@ -1,6 +1,5 @@
 import multer from "multer";
 
-
 // multer setup 
 const storage = multer.diskStorage({
   filename : (req, file, cb) => {
@@ -11,7 +10,7 @@ const storage = multer.diskStorage({
 // multer middleware
 export const categoryPhotoMulter = multer({ storage }).single("photo");
 export const brandPhotoMulter = multer({ storage }).single("photo");
-export const productPhotoMulter = multer({ storage }).array("photo", 8);
+export const productPhotoMulter = multer({ storage }).array("photo", 10);
 
 
 
