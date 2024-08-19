@@ -5,6 +5,7 @@ import { findPublicId } from "../helpers/helpers.js";
 import Category from "../models/Category.js";
 import Product from "../models/Product.js";
 import { fileDeleteFromCloud, fileUploadToCloud } from "../utilis/cloudinary.js";
+import Brand from "../models/Brand.js";
 
  
 /**
@@ -16,7 +17,7 @@ import { fileDeleteFromCloud, fileUploadToCloud } from "../utilis/cloudinary.js"
  */
 export const getAllProducts =  asyncHandler(async(req, res) => {
       // get all product 
-      const productList = await Product.find().populate("category");
+      const productList = await Product.find().populate("category").populate("brand");
 
       // check product 
       if (productList.length === 0 ) {
@@ -65,7 +66,15 @@ export const createProduct = asyncHandler(async(req, res) => {
    return res.status(404).json({ message : "Category Not Found"});
   }; 
 
+  const brandData = await Brand.findById(req.body.brand);
+
+  // check category  
+  if (!brandData) {
+   return res.status(404).json({ message : "Brand Not Found"});
+  }; 
+
   const { name,
+          subCat,
           description,
           brand,
           price,
@@ -96,6 +105,7 @@ export const createProduct = asyncHandler(async(req, res) => {
   // create product 
   const newProduct = await Product.create({ 
     name, 
+    subCat,
     description, 
     brand, 
     price, 
@@ -156,6 +166,7 @@ export const updateProduct = asyncHandler(async(req, res) => {
    // get form data 
    const { 
     name,
+    subCat,
     description,
     brand,
     price,
@@ -179,7 +190,8 @@ export const updateProduct = asyncHandler(async(req, res) => {
  // update product
   const productUpdate = await Product.findByIdAndUpdate(
     id, 
-    { name,    
+    { name,
+      subCat,    
       description,
       brand,
       price,
@@ -192,7 +204,6 @@ export const updateProduct = asyncHandler(async(req, res) => {
     }, 
     {new : true});
 
-   
    return res.status(200).json({productUpdate,  message : "Product Updated Successfull"})
 });  
 

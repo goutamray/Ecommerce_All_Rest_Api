@@ -20,9 +20,8 @@ const productSchema = mongoose.Schema({
     }
   ],
   brand : {
-    type: String,
-    trim : true,
-    default : ""
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "Brand",
   },
   price : {
     type : Number,
@@ -34,6 +33,10 @@ const productSchema = mongoose.Schema({
   }, 
   category : {
     type : mongoose.Schema.Types.ObjectId,
+    ref : "Category",
+  }, 
+  subCat : {
+    type : String,
     ref : "Category",
   }, 
   countInStock : {

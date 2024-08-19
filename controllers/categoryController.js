@@ -59,9 +59,9 @@ export const getSingleCategory = asyncHandler(async(req, res) => {
  */
 export const createCategory = asyncHandler(async(req, res) => {
   // get form data 
-  const { name, color } = req.body;
+  const { name, color, subCat } = req.body;
 
-  if (!name || !color) {
+  if (!name || !color || !subCat) {
      res.status(400).json({ message : "All fields are Required" })
   };
 
@@ -74,7 +74,7 @@ export const createCategory = asyncHandler(async(req, res) => {
    }; 
 
      // create category 
-     const newCategory = await Category.create({ name, color, photo : filedata  });
+     const newCategory = await Category.create({ name, subCat, color, photo : filedata  });
 
     // save data 
     return res.status(201).json({ category : newCategory,  message : "Category Created Successfull"})
@@ -119,7 +119,7 @@ export const updateCategory = asyncHandler(async(req, res) => {
   const { id } = req.params;
 
    // get form data 
-   const { name, color } = req.body;
+   const { name, color, subCat } = req.body;
 
 
   // photo manage 
@@ -134,7 +134,7 @@ export const updateCategory = asyncHandler(async(req, res) => {
  // update category
   const categoryUpdate = await Category.findByIdAndUpdate(
     id, 
-    { name, color, photo : filedata }, 
+    { name, subCat, color, photo : filedata }, 
     {new : true});
 
    
