@@ -18,15 +18,13 @@ export const getAllCategory = asyncHandler(async(req, res) => {
     const categoryList = await Category.find();
 
     // check category 
-    if (categoryList.length === 0 ) {
-      return res.status(404).json({ 
-        categoryList : "", 
-        message : "Categories Not Found" });
+    if (!categoryList) {
+      return res.status(404).json({ categoryList : "", message : "Categories Not Found" });
     }
 
   return res.status(200).json({ categoryList,  message : "Get All Category"});
 });
-
+ 
 
 /**
  * @DESC GET SINGLE CATEGORY
@@ -43,7 +41,7 @@ export const getSingleCategory = asyncHandler(async(req, res) => {
   const category = await Category.findById(id); 
 
   if (!category) {
-     return  res.status(404).json({ message : "Single Category Data Not Found"});
+     return res.status(404).json({ message : "Single Category Data Not Found"});
   }
 
   return res.status(200).json({ category , message : "Get Single Category"})
@@ -62,7 +60,7 @@ export const createCategory = asyncHandler(async(req, res) => {
   const { name, color, subCat } = req.body;
 
   if (!name || !color || !subCat) {
-     res.status(400).json({ message : "All fields are Required" })
+    return res.status(400).json({ message : "All fields are Required" })
   };
 
    // photo manage 

@@ -21,10 +21,8 @@ export const getAllBrand = asyncHandler(async(req, res) => {
     const brandList = await Brand.find();
 
     // check brand 
-    if (brandList.length === 0 ) {
-      return res.status(404).json({ 
-        brandList : "", 
-        message : "Brand Not Found" });
+    if (!brandList) {
+      return res.status(404).json({ brandList : "", message : "Brand Not Found" });
     }
 
   // response 
@@ -126,7 +124,6 @@ export const updateBrand = asyncHandler(async(req, res) => {
 
    // get form data 
    const { name } = req.body;
-
 
   // photo manage 
   let filedata = null;

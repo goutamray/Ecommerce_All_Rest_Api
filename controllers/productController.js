@@ -20,13 +20,11 @@ export const getAllProducts =  asyncHandler(async(req, res) => {
       const productList = await Product.find().populate("category").populate("brand");
 
       // check product 
-      if (productList.length === 0 ) {
-        return res.status(404).json({ 
-          productList : "", 
-          message : "Products Not Found" });
+      if (!productList) {
+        return res.status(404).json({ productList : "", message : "Products Not Found"});
       }; 
   
-    return res.status(200).json({ productList,  message : "Get All Products"});
+    return res.status(200).json({ productList, message : "Get All Products"});
 }); 
 
 /**
@@ -44,7 +42,7 @@ export const getSingleProduct = asyncHandler(async(req, res) => {
   const product = await Product.findById(id); 
 
   if (!product) {
-     return  res.status(404).json({ message : "Single Product Data Not Found"});
+     return res.status(404).json({ message : "Single Product Data Not Found"});
   }
 
   return res.status(200).json({ product , message : "Get Single Product"})
@@ -86,7 +84,6 @@ export const createProduct = asyncHandler(async(req, res) => {
           } = req.body; 
 
        
-
     // validation
   if (!name || !description || !price) {
     return res.status(400).json({ message : "All fields are Required" })
@@ -117,9 +114,7 @@ export const createProduct = asyncHandler(async(req, res) => {
     photo : filedata  
   });
 
-
    return res.status(201).json({ newProduct,  message : "Product created Successfull"});
-   
 }); 
 
 
@@ -132,21 +127,21 @@ export const createProduct = asyncHandler(async(req, res) => {
  * 
  */
 export const deleteProduct = asyncHandler(async(req, res) => {
-     // get params 
-     const { id } = req.params;
+  // get params 
+  const { id } = req.params;
 
-     // delete product data 
-     const product = await Product.findByIdAndDelete(id);
+  // delete product data 
+  const product = await Product.findByIdAndDelete(id);
   
-     // check product
-     if (!product) {
-       return res.status(404).json({ message : "Product not found" })
-     }
+  // check product
+ if (!product) {
+    return res.status(404).json({ message : "Product not found" })
+  }
 
-     // delete cloud file
-     const photoUrl = product.photo;
+  // delete cloud file
+  const photoUrl = product.photo;
 
-     await fileDeleteFromCloud(findPublicId(photoUrl));
+  await fileDeleteFromCloud(findPublicId(photoUrl));
 
   return res.status(200).json({ product,  message : "Product Deleted Successfully"})
 });  
