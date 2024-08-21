@@ -98,8 +98,8 @@ export const deleteCategory = asyncHandler(async(req, res) => {
        return res.status(404).json({ message : "Category not found" })
      }
 
-     // delete cloud file
-      await fileDeleteFromCloud(findPublicId(category.photo));
+    // delete cloud file
+    await fileDeleteFromCloud(findPublicId(category.photo));
 
    return res.status(200).json({ category,  message : "Category Deleted Successfull"})
 })
@@ -135,7 +135,6 @@ export const updateCategory = asyncHandler(async(req, res) => {
     { name, subCat, color, photo : filedata }, 
     {new : true});
 
-   
    return res.status(200).json({categoryUpdate,  message : "Category Updated Successfull"})
 });  
 
