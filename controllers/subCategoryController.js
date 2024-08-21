@@ -61,7 +61,7 @@ export const createSubCategory = asyncHandler(async(req, res) => {
   // get form data 
   const { name, photo } = req.body;
 
-  if (!name || !photo ) {
+  if (!name ) {
     return res.status(400).json({ message : "All fields are Required" })
   };
 
@@ -120,7 +120,7 @@ export const updateSubCategory = asyncHandler(async(req, res) => {
   const { id } = req.params;
 
    // get form data 
-   const { name, photo } = req.body;
+   const { name } = req.body;
 
   // photo manage 
   let filedata = null;
@@ -132,13 +132,13 @@ export const updateSubCategory = asyncHandler(async(req, res) => {
 
   
  // update sub category
-  const subCategoryUpdate = await SubCategory.findByIdAndUpdate(
+  const subCategory = await SubCategory.findByIdAndUpdate(
     id, 
     { name, photo : filedata }, 
     {new : true});
 
    
-   return res.status(200).json({subCategoryUpdate,  message : "Sub Category Updated Successfull"})
+   return res.status(200).json({subCategory,  message : "Sub Category Updated Successfull"})
 });  
 
 

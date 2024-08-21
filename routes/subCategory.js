@@ -15,11 +15,11 @@ import { subCategoryPhotoMulter } from "../utilis/multer.js";
 const router = express.Router(); 
 
 // routes 
-router.post("/", subCategoryPhotoMulter, createSubCategory); // create category
-router.get("/", getAllSubCategory);        // get all category 
-router.get("/:id", getSingleSubCategory);  // get single category
-router.delete("/:id", deleteSubCategory);  // delete category 
-router.patch("/:id", subCategoryPhotoMulter, updateSubCategory);   // update category 
+router.post("/", subCategoryPhotoMulter, createSubCategory); // create sub category
+router.get("/", getAllSubCategory);        // get all sub category 
+router.get("/:id", getSingleSubCategory);  // get single sub category
+router.delete("/:id", deleteSubCategory);  // delete sub category 
+router.patch("/:id", subCategoryPhotoMulter, updateSubCategory);   // update sub category 
 
 
 // export default router 

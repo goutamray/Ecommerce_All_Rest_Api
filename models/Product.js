@@ -36,8 +36,8 @@ const productSchema = mongoose.Schema({
     ref : "Category",
   }, 
   subCat : {
-    type : String,
-    ref : "Category",
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "SubCategory",
   }, 
   countInStock : {
     type : Number,

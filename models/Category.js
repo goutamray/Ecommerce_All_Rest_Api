@@ -8,8 +8,8 @@ const categorySchema = mongoose.Schema({
     trim : true,
   },
   subCat : {
-    type: String,
-    trim : true,
+    type : mongoose.Schema.Types.ObjectId,
+    ref : "SubCategory",
   },
   photo : {
     type : String,

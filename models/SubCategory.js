@@ -6,12 +6,11 @@ const subCategorySchema = mongoose.Schema({
     type: String,
     trim : true,
   },
-  photo : [
-    {
+  photo : {
       type: String,
       default : null,
-    },
-  ]
+   },
+  
 },
 {
   timestamps : true,

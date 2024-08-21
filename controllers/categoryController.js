@@ -15,7 +15,7 @@ import { findPublicId } from "../helpers/helpers.js";
  */
 export const getAllCategory = asyncHandler(async(req, res) => {
     // get all categories 
-    const categoryList = await Category.find();
+    const categoryList = await Category.find().populate("subCat");
 
     // check category 
     if (!categoryList) {
@@ -72,10 +72,10 @@ export const createCategory = asyncHandler(async(req, res) => {
    }; 
 
      // create category 
-     const newCategory = await Category.create({ name, subCat, color, photo : filedata  });
+     const category = await Category.create({ name, subCat, color, photo : filedata  });
 
     // save data 
-    return res.status(201).json({ category : newCategory,  message : "Category Created Successfull"})
+    return res.status(201).json({ category,  message : "Category Created Successfull"})
 })
 
 

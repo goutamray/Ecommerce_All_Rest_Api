@@ -17,7 +17,7 @@ import Brand from "../models/Brand.js";
  */
 export const getAllProducts =  asyncHandler(async(req, res) => {
       // get all product 
-      const productList = await Product.find().populate("category").populate("brand");
+      const productList = await Product.find().populate("category").populate("brand").populate("subCat");
 
       // check product 
       if (!productList) {
@@ -64,6 +64,7 @@ export const createProduct = asyncHandler(async(req, res) => {
    return res.status(404).json({ message : "Category Not Found"});
   }; 
 
+  // find single brand id
   const brandData = await Brand.findById(req.body.brand);
 
   // check category  
