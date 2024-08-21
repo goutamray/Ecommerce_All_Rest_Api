@@ -59,7 +59,7 @@ export const createCategory = asyncHandler(async(req, res) => {
   // get form data 
   const { name, color, subCat } = req.body;
 
-  if (!name || !color || !subCat) {
+  if (!name || !color ) {
     return res.status(400).json({ message : "All fields are Required" })
   };
 

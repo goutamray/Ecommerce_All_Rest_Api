@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares/errorHandler.js";
 import categoryRouter from "./routes/category.js";
 import brandRouter from "./routes/brand.js";
 import productRouter from "./routes/product.js";
+import subCategoryRouter from "./routes/subCategory.js";
 import cors from "cors";
 import bodyParser from "body-parser";
 
@@ -24,7 +25,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extends : false }));
 app.use(bodyParser.json()); 
 app.use(cors({
-  origin : "http://localhost:3001",
+  origin : ["http://localhost:3000", "http://localhost:3001"],
   credentials : true,
 }));
 
@@ -36,10 +37,10 @@ app.use(express.static("public"));
 app.use("/api/v1/category", categoryRouter); 
 app.use("/api/v1/product", productRouter); 
 app.use("/api/v1/brand", brandRouter); 
+app.use("/api/v1/subCategory", subCategoryRouter); 
 
 // error handler 
 app.use(errorHandler); 
-
 
 // listen server
 app.listen(PORT, () => {

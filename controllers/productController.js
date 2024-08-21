@@ -81,6 +81,10 @@ export const createProduct = asyncHandler(async(req, res) => {
           countInStock, 
           rating, 
           isFeatured,
+          discount,
+          productRams,
+          productSize,
+          productWeight,
           } = req.body; 
 
        
@@ -111,6 +115,10 @@ export const createProduct = asyncHandler(async(req, res) => {
     countInStock, 
     rating, 
     isFeatured, 
+    discount,
+    productRams,
+    productSize,
+    productWeight,
     photo : filedata  
   });
 
@@ -169,7 +177,12 @@ export const updateProduct = asyncHandler(async(req, res) => {
     category,
     countInStock, 
     rating, 
-    isFeatured  } = req.body; 
+    isFeatured,
+    discount,
+    productRams,
+    productSize,
+    productWeight,
+    } = req.body; 
 
 
     // Handle multiple file uploads
@@ -194,7 +207,11 @@ export const updateProduct = asyncHandler(async(req, res) => {
       category,
       countInStock, 
       rating, 
-      isFeatured , 
+      isFeatured ,
+      discount,
+      productRams,
+      productSize,
+      productWeight, 
       photo : filedata 
     }, 
     {new : true});
@@ -202,5 +219,6 @@ export const updateProduct = asyncHandler(async(req, res) => {
    return res.status(200).json({productUpdate,  message : "Product Updated Successfull"})
 });  
 
+ 
 
 
