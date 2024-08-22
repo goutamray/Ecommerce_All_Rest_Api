@@ -1,13 +1,18 @@
 import dotenv from "dotenv";
 import express from "express";
 import colors from "colors"; 
+
 import { mongoDbConnection } from "./config/mongodb.js";
 import { errorHandler } from "./middlewares/errorHandler.js";
+
 import categoryRouter from "./routes/category.js";
 import brandRouter from "./routes/brand.js";
 import productRouter from "./routes/product.js";
 import subCategoryRouter from "./routes/subCategory.js";
 import productRamRouter from "./routes/productRam.js";
+import productSizeRouter from "./routes/productSize.js";
+import productWeightRouter from "./routes/productWeight.js";
+
 import cors from "cors";
 import bodyParser from "body-parser";
 
@@ -40,6 +45,8 @@ app.use("/api/v1/product", productRouter);
 app.use("/api/v1/brand", brandRouter); 
 app.use("/api/v1/subCategory", subCategoryRouter); 
 app.use("/api/v1/productRam", productRamRouter); 
+app.use("/api/v1/productSize", productSizeRouter); 
+app.use("/api/v1/productWeight", productWeightRouter); 
 
 // error handler 
 app.use(errorHandler); 
