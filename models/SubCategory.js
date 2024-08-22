@@ -10,7 +10,6 @@ const subCategorySchema = mongoose.Schema({
       type: String,
       default : null,
    },
-  
 },
 {
   timestamps : true,
@@ -18,3 +17,5 @@ const subCategorySchema = mongoose.Schema({
 
 //export default 
 export default mongoose.model("SubCategory", subCategorySchema);
+
+

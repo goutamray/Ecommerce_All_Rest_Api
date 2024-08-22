@@ -7,6 +7,7 @@ import categoryRouter from "./routes/category.js";
 import brandRouter from "./routes/brand.js";
 import productRouter from "./routes/product.js";
 import subCategoryRouter from "./routes/subCategory.js";
+import productRamRouter from "./routes/productRam.js";
 import cors from "cors";
 import bodyParser from "body-parser";
 
@@ -38,6 +39,7 @@ app.use("/api/v1/category", categoryRouter);
 app.use("/api/v1/product", productRouter); 
 app.use("/api/v1/brand", brandRouter); 
 app.use("/api/v1/subCategory", subCategoryRouter); 
+app.use("/api/v1/productRam", productRamRouter); 
 
 // error handler 
 app.use(errorHandler); 

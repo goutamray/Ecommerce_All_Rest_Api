@@ -77,10 +77,10 @@ export const createBrand = asyncHandler(async(req, res) => {
    }; 
 
      // create new brand 
-     const newBrand = await Brand.create({ name, photo : filedata  });
+     const brand = await Brand.create({ name, photo : filedata  });
 
     // save data 
-    return res.status(201).json({ newBrand,  message : "Brand Created Successfull"})
+    return res.status(201).json({ brand , message : "Brand Created Successfull"})
 })
 
 
