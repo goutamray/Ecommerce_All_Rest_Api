@@ -102,7 +102,7 @@ export const createProduct = asyncHandler(async(req, res) => {
         const data = await fileUploadToCloud(file.path);
         filedata.push(data.secure_url);
       }
-    }
+    };
 
   // create product 
   const newProduct = await Product.create({ 
@@ -144,8 +144,8 @@ export const deleteProduct = asyncHandler(async(req, res) => {
   
   // check product
  if (!product) {
-    return res.status(404).json({ message : "Product not found" })
-  }
+    return res.status(404).json({ message : "Product not found" });
+  };
 
   // delete cloud file
   const photoUrl = product.photo;
@@ -194,7 +194,7 @@ export const updateProduct = asyncHandler(async(req, res) => {
         const data = await fileUploadToCloud(file.path);
         filedata.push(data.secure_url);
       }
-    } 
+    }; 
 
  // update product
   const productUpdate = await Product.findByIdAndUpdate(
@@ -217,7 +217,7 @@ export const updateProduct = asyncHandler(async(req, res) => {
     }, 
     {new : true});
 
-   return res.status(200).json({productUpdate,  message : "Product Updated Successfull"})
+   return res.status(200).json({productUpdate,  message : "Product Updated Successfull"});
 });  
 
  

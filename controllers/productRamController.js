@@ -43,7 +43,7 @@ export const getSingleProductRam = asyncHandler(async(req, res) => {
 
   // response 
   return res.status(200).json({ productRam , message : "Get Single Product Ram"})
-})
+});
 
 
 /**
@@ -66,7 +66,7 @@ export const createProductRam = asyncHandler(async(req, res) => {
 
   // save data 
   return res.status(201).json({ productRam , message : "Product Ram Created Successfull"})
-})
+});
 
 
 /**
@@ -90,7 +90,7 @@ export const deleteProductRam = asyncHandler(async(req, res) => {
 
   // send response 
   return res.status(200).json({ productRam,  message : "Product Ram Deleted Successfull"})
-})
+});
 
 
 /**

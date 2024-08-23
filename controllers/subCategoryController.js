@@ -4,8 +4,6 @@ import { findPublicId } from "../helpers/helpers.js";
 import SubCategory from "../models/SubCategory.js"
 import { fileDeleteFromCloud, fileUploadToCloud } from "../utilis/cloudinary.js";
 
-
-
 /**
  * @DESC  GET ALL SUB CATEGORY
  * @METHOD GET
@@ -46,7 +44,7 @@ export const getSingleSubCategory = asyncHandler(async(req, res) => {
 
  // response 
  return res.status(200).json({ subCategoryData , message : "Get Single Sub Category"})
-})
+}); 
 
 
 
@@ -77,9 +75,9 @@ export const createSubCategory = asyncHandler(async(req, res) => {
   // create sub category 
   const newSubCategory = await SubCategory.create({ name , photo : filedata });
 
-  // save data 
-  return res.status(201).json({ newSubCategory,  message : "Sub Category Created Successfull"});
-})
+   // save data 
+   return res.status(201).json({ newSubCategory,  message : "Sub Category Created Successfull"});
+ });  
 
 
 /**
@@ -104,8 +102,8 @@ export const deleteSubCategory = asyncHandler(async(req, res) => {
   // delete cloud file
   await fileDeleteFromCloud(findPublicId(subCategory.photo)); 
 
-return res.status(200).json({ subCategory,  message : "Sub Category Deleted Successfull"});
-})
+   return res.status(200).json({ subCategory,  message : "Sub Category Deleted Successfull"});
+});
 
 
 /**

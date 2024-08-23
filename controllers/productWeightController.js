@@ -43,7 +43,7 @@ export const getSingleProductWeight = asyncHandler(async(req, res) => {
 
   // response 
   return res.status(200).json({ productWeight , message : "Get Single Product Weight"})
-})
+}); 
 
 
 /**
@@ -66,7 +66,7 @@ export const createProductWeight = asyncHandler(async(req, res) => {
 
   // save data 
   return res.status(201).json({ productWeight , message : "Product Weight Created Successfull"})
-})
+}); 
 
 
 /**
@@ -90,7 +90,7 @@ export const deleteProductWeight = asyncHandler(async(req, res) => {
 
   // send response 
   return res.status(200).json({ productWeight,  message : "Product Weight Deleted Successfull"})
-})
+});
 
 
 /**

@@ -43,7 +43,7 @@ export const getSingleProductSize = asyncHandler(async(req, res) => {
 
   // response 
   return res.status(200).json({ productSize , message : "Get Single Product Size"})
-})
+});
 
 
 /**
@@ -66,7 +66,7 @@ export const createProductSize = asyncHandler(async(req, res) => {
 
   // save data 
   return res.status(201).json({ productSize , message : "Product Size Created Successfull"})
-})
+});
 
 
 /**
@@ -90,7 +90,7 @@ export const deleteProductSize = asyncHandler(async(req, res) => {
 
   // send response 
   return res.status(200).json({ productSize,  message : "Product Size Deleted Successfull"})
-})
+});
 
 
 /**
