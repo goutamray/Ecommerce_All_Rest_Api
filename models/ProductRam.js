@@ -6,6 +6,7 @@ const productRamSchema = mongoose.Schema({
   name : {
     type: String,
     trim : true,
+    default: null,
   },
 },
 {

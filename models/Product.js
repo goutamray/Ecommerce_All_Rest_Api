@@ -52,19 +52,19 @@ const productSchema = mongoose.Schema({
       type: String,
       trim : true,
     }
-  ],
+ ], 
   productSize : [
-    {
+   {
       type: String,
       trim : true,
-    }
-  ],
+   }
+  ], 
   productWeight : [
     {
-      type: String,
-      trim : true,
+       type: String,
+       trim : true,
     }
-  ],
+  ], 
   rating : {
     type : Number,
     default : 0, 
@@ -73,7 +73,6 @@ const productSchema = mongoose.Schema({
     type : Boolean,
     default : false,
   }, 
-
 },
 {
   timestamps : true,

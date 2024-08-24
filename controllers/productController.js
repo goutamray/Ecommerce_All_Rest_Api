@@ -16,8 +16,9 @@ import Brand from "../models/Brand.js";
  * 
  */
 export const getAllProducts =  asyncHandler(async(req, res) => {
-      // get all product 
-      const productList = await Product.find().populate("category").populate("brand").populate("subCat");
+
+    // Get all products with populated fields
+    const productList = await Product.find().populate("category").populate("brand").populate("subCat");
 
       // check product 
       if (!productList) {
