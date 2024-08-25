@@ -1,0 +1,15 @@
+
+1st step : npm install 
+2nd step : create .env file 
+3rd step : PORT dite hbe 
+4th step : MONGO_URL dite hbe  
+
+
+###### Examples ######
+
+PORT = 5050
+APP_ENV = Development 
+MONGO_URL = mongodb://127.0.0.1:27017/ecommerce
+
+
+

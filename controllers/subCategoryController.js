@@ -57,12 +57,11 @@ export const getSingleSubCategory = asyncHandler(async(req, res) => {
  */
 export const createSubCategory = asyncHandler(async(req, res) => {
   // get form data 
-  const { name, photo } = req.body;
+  const { name } = req.body;
 
   if (!name ) {
     return res.status(400).json({ message : "All fields are Required" })
   };
-
 
   // photo manage 
   let filedata = null;
@@ -120,15 +119,20 @@ export const updateSubCategory = asyncHandler(async(req, res) => {
    // get form data 
    const { name } = req.body;
 
-  // photo manage 
-  let filedata = null;
+    // Fetch the existing sub category to get the current photo URL
+    const existingSubCategory = await SubCategory.findById(id);
+    if (!existingSubCategory) {
+      return res.status(404).json({ message: "Sub Category not found" });
+    }; 
 
-  if(req.file){
-    const data = await fileUploadToCloud(req.file.path)
-    filedata = data.secure_url;
-  }; 
+    // Photo management
+    let filedata = existingSubCategory.photo; // Keep old photo URL by default
 
-  
+    if (req.file) {
+      const data = await fileUploadToCloud(req.file.path);
+      filedata = data.secure_url; // Update with new photo URL
+    };
+
  // update sub category
   const subCategory = await SubCategory.findByIdAndUpdate(
     id, 

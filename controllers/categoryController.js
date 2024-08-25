@@ -112,31 +112,38 @@ export const deleteCategory = asyncHandler(async(req, res) => {
  * @ACCESS PUBLIC 
  * 
  */
-export const updateCategory = asyncHandler(async(req, res) => {
-  // get params 
-  const { id } = req.params;
 
-   // get form data 
-   const { name, color, subCat } = req.body;
+export const updateCategory = asyncHandler(async (req, res) => {
 
+    // Get the category ID from parameters
+    const { id } = req.params;
 
-  // photo manage 
-  let filedata = null;
+    // Get form data from request body
+    const { name, color, subCat } = req.body;
 
-  if(req.file){
-    const data = await fileUploadToCloud(req.file.path)
-    filedata = data.secure_url;
-  }; 
+    // Fetch the existing category to get the current photo URL
+    const existingCategory = await Category.findById(id);
+    if (!existingCategory) {
+      return res.status(404).json({ message: "Category not found" });
+    }
 
-  
- // update category
-  const categoryUpdate = await Category.findByIdAndUpdate(
-    id, 
-    { name, subCat, color, photo : filedata }, 
-    {new : true});
+    // Photo management
+    let filedata = existingCategory.photo; // Keep old photo URL by default
 
-   return res.status(200).json({categoryUpdate,  message : "Category Updated Successfull"})
-});  
+    if (req.file) {
+      const data = await fileUploadToCloud(req.file.path);
+      filedata = data.secure_url; // Update with new photo URL
+    }
+
+    // Update category
+    const categoryUpdate = await Category.findByIdAndUpdate(
+      id,
+      { name, subCat, color, photo: filedata },
+      { new: true }
+    );
+
+    return res.status(200).json({ categoryUpdate, message: "Category Updated Successfully" });
+});
 
 
 
