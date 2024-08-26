@@ -20,8 +20,8 @@ const productSchema = mongoose.Schema({
     }
   ],
   brand : {
-    type : mongoose.Schema.Types.ObjectId,
-    ref : "Brand",
+    type: String,
+    trim : true,
   },
   price : {
     type : Number,

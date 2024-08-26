@@ -18,7 +18,7 @@ import Brand from "../models/Brand.js";
 export const getAllProducts =  asyncHandler(async(req, res) => {
 
     // Get all products with populated fields
-    const productList = await Product.find().populate("category").populate("brand").populate("subCat");
+    const productList = await Product.find().populate("category").populate("subCat");
 
       // check product 
       if (!productList) {
@@ -74,10 +74,10 @@ export const createProduct = asyncHandler(async (req, res) => {
           return res.status(404).json({ message: "Category Not Found" });
       }
 
-      const brandData = await Brand.findById(req.body.brand);
-      if (!brandData) {
-          return res.status(404).json({ message: "Brand Not Found" });
-      }
+      // const brandData = await Brand.findById(req.body.brand);
+      // if (!brandData) {
+      //     return res.status(404).json({ message: "Brand Not Found" });
+      // }
 
       const {
           name,
@@ -272,10 +272,10 @@ export const updateProduct = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Category Not Found" });
     }
 
-    const brandData = req.body.brand ? await Brand.findById(req.body.brand) : null;
-    if (req.body.brand && !brandData) {
-      return res.status(404).json({ message: "Brand Not Found" });
-    }
+    // const brandData = req.body.brand ? await Brand.findById(req.body.brand) : null;
+    // if (req.body.brand && !brandData) {
+    //   return res.status(404).json({ message: "Brand Not Found" });
+    // }
 
     const {
       name,
@@ -284,6 +284,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
       price,
       oldPrice,
       category,
+      brand,
       countInStock,
       rating,
       isFeatured,
@@ -313,7 +314,7 @@ export const updateProduct = asyncHandler(async (req, res) => {
     product.name = name || product.name;
     product.subCat = subCat || product.subCat;
     product.description = description || product.description;
-    product.brand = brandData ? brandData._id : product.brand;
+    product.brand = brand || product.brand;
     product.price = price || product.price;
     product.oldPrice = oldPrice || product.oldPrice;
     product.category = categoryData ? categoryData._id : product.category;
