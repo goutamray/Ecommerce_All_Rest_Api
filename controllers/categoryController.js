@@ -13,7 +13,7 @@ import { findPublicId } from "../helpers/helpers.js";
  * @ACCESS PUBLIC 
  * 
  */
-export const getAllCategory = asyncHandler(async(req, res) => {
+ export const getAllCategory = asyncHandler(async(req, res) => {
     // get all categories 
     const categoryList = await Category.find().populate("subCat");
 
@@ -25,6 +25,7 @@ export const getAllCategory = asyncHandler(async(req, res) => {
   return res.status(200).json({ categoryList,  message : "Get All Category"});
 });
  
+
 
 /**
  * @DESC GET SINGLE CATEGORY

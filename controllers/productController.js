@@ -5,9 +5,8 @@ import { findPublicId } from "../helpers/helpers.js";
 import Category from "../models/Category.js";
 import Product from "../models/Product.js";
 import { fileDeleteFromCloud, fileUploadToCloud } from "../utilis/cloudinary.js";
-import Brand from "../models/Brand.js";
 
- 
+
 /**
  * @DESC GET ALL PRODUCT 
  * @METHOD GET
@@ -15,18 +14,47 @@ import Brand from "../models/Brand.js";
  * @ACCESS PUBLIC 
  * 
  */
-export const getAllProducts =  asyncHandler(async(req, res) => {
 
-    // Get all products with populated fields
-    const productList = await Product.find().populate("category").populate("subCat");
+export const getAllProducts = asyncHandler(async (req, res) => {
+  // Extract category filter from query parameters
+  const { category } = req.query;
 
-      // check product 
-      if (!productList) {
-        return res.status(404).json({ productList : "", message : "Products Not Found"});
-      }; 
+  // Build the filter object
+  const filter = {};
+
+  if (category) {
+      filter.category = category;
+  }
+
+  // Get all products with category filtering and populated fields
+  const productList = await Product.find(filter)
+      .populate("category")
+      .populate("subCat")
+      .limit(15);
+
+  // Check if products were found
+  if (!productList || productList.length === 0) {
+      return res.status(404).json({ productList: "", message: "Products Not Found" });
+  }
+
+  return res.status(200).json({ productList, message: "Get All Products" });
+});
+
+
+
+// export const getAllProducts =  asyncHandler(async(req, res) => {
+
+//     // Get all products with populated fields
+//     const productList = await Product.find().populate("category").populate("subCat").limit(12);
+
+//       // check product 
+//       if (!productList) {
+//         return res.status(404).json({ productList : "", message : "Products Not Found"});
+//       }; 
   
-    return res.status(200).json({ productList, message : "Get All Products"});
-}); 
+//     return res.status(200).json({ productList, message : "Get All Products"});
+// }); 
+
 
 /**
  * @DESC GET SINGLE PRODUCT 
@@ -74,11 +102,6 @@ export const createProduct = asyncHandler(async (req, res) => {
           return res.status(404).json({ message: "Category Not Found" });
       }
 
-      // const brandData = await Brand.findById(req.body.brand);
-      // if (!brandData) {
-      //     return res.status(404).json({ message: "Brand Not Found" });
-      // }
-
       const {
           name,
           subCat,
@@ -96,10 +119,6 @@ export const createProduct = asyncHandler(async (req, res) => {
       // Validation
       if (!name || !description || !price) {
           return res.status(400).json({ message: "All fields are Required" });
-      }
-
-      if (!Array.isArray(productWeight) || productWeight.length === 0 || productWeight.some(weight => typeof weight !== 'string')) {
-          return res.status(400).json({ message: "Product weight must be an array of valid strings" });
       }
 
       // Handle multiple file uploads
@@ -137,80 +156,6 @@ export const createProduct = asyncHandler(async (req, res) => {
       return res.status(500).json({ message: "Internal Server Error", error: error.message });
   }
 });
-
-// export const createProduct = asyncHandler(async(req, res) => {
-//   const categoryData = await Category.findById(req.body.category);
-
-//   // check category  
-//   if (!categoryData) {
-//    return res.status(404).json({ message : "Category Not Found"});
-//   }; 
-
-//   // find single brand id
-//   const brandData = await Brand.findById(req.body.brand);
-
-//   // check category  
-//   if (!brandData) {
-//    return res.status(404).json({ message : "Brand Not Found"});
-//   }; 
-
-
-//   const { name,
-//           subCat,
-//           description,
-//           brand,
-//           price,
-//           oldPrice,
-//           category,
-//           countInStock, 
-//           rating, 
-//           isFeatured,
-//           discount,
-//           productRams,
-//           productSize,
-//           productWeight,
-//           } = req.body; 
-
-       
-//     // validation
-//   if (!name || !description || !price) {
-//     return res.status(400).json({ message : "All fields are Required" })
-//   };
-
-//     // Handle multiple file uploads
-//     let filedata = [];
-
-//     if (req.files && req.files.length > 0) {
-//       for (const file of req.files) {
-//         const data = await fileUploadToCloud(file.path);
-//         filedata.push(data.secure_url);
-//       }
-//     };
-
-
-
-//   // create product 
-//   const newProduct = await Product.create({ 
-//     name, 
-//     subCat,
-//     description, 
-//     brand, 
-//     price, 
-//     oldPrice,
-//     category, 
-//     countInStock, 
-//     rating, 
-//     isFeatured, 
-//     discount,
-//     productRams,
-//     productSize,
-//     productWeight,
-//     photo : filedata  
-//   });
-
-//    return res.status(201).json({ newProduct,  message : "Product created Successfull"});
-// }); 
-
 
 
 /**
@@ -272,11 +217,6 @@ export const updateProduct = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "Category Not Found" });
     }
 
-    // const brandData = req.body.brand ? await Brand.findById(req.body.brand) : null;
-    // if (req.body.brand && !brandData) {
-    //   return res.status(404).json({ message: "Brand Not Found" });
-    // }
-
     const {
       name,
       subCat,
@@ -294,10 +234,6 @@ export const updateProduct = asyncHandler(async (req, res) => {
     // Validation
     if (!name && !description && !price) {
       return res.status(400).json({ message: "At least one field must be updated" });
-    }
-
-    if (productWeight && (!Array.isArray(productWeight) || productWeight.length === 0 || productWeight.some(weight => typeof weight !== 'string'))) {
-      return res.status(400).json({ message: "Product weight must be an array of valid strings" });
     }
 
     // Handle multiple file uploads (if any)
@@ -338,65 +274,5 @@ export const updateProduct = asyncHandler(async (req, res) => {
   }
 });
 
-// old controller 
-// export const updateProduct = asyncHandler(async(req, res) => {
-
-//   // get params 
-//   const { id } = req.params;
-
-//    // get form data 
-//    const { 
-//     name,
-//     subCat,
-//     description,
-//     brand,
-//     price,
-//     oldPrice,
-//     category,
-//     countInStock, 
-//     rating, 
-//     isFeatured,
-//     discount,
-//     productRams,
-//     productSize,
-//     productWeight,
-//     } = req.body; 
-
-
-//     // Handle multiple file uploads
-//     let filedata = [];
-
-//     if (req.files && req.files.length > 0) {
-//       for (const file of req.files) {
-//         const data = await fileUploadToCloud(file.path);
-//         filedata.push(data.secure_url);
-//       }
-//     }; 
-
-//  // update product
-//   const productUpdate = await Product.findByIdAndUpdate(
-//     id, 
-//     { name,
-//       subCat,    
-//       description,
-//       brand,
-//       price,
-//       oldPrice,
-//       category,
-//       countInStock, 
-//       rating, 
-//       isFeatured ,
-//       discount,
-//       productRams,
-//       productSize,
-//       productWeight, 
-//       photo : filedata 
-//     }, 
-//     {new : true});
-
-//    return res.status(200).json({productUpdate,  message : "Product Updated Successfull"});
-// });  
-
- 
 
 

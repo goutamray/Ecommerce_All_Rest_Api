@@ -16,7 +16,7 @@ const router = express.Router();
 // routes 
 router.get("/", getAllProducts ); // get products
 router.get("/:id", getSingleProduct ); // get single product
-router.post("/", productPhotoMulter, createProduct ); // create product
+router.post("/create", productPhotoMulter, createProduct ); // create product
 router.delete("/:id", deleteProduct ); // delete product
 router.patch("/:id", productPhotoMulter, updateProduct ); // update product
 
