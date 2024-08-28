@@ -14,46 +14,94 @@ import { fileDeleteFromCloud, fileUploadToCloud } from "../utilis/cloudinary.js"
  * @ACCESS PUBLIC 
  * 
  */
-
 export const getAllProducts = asyncHandler(async (req, res) => {
-  // Extract category filter from query parameters
-  const { category } = req.query;
+  const { category, minPrice, maxPrice, rating } = req.query;
 
-  // Build the filter object
   const filter = {};
 
+
+  // Extract category filter from query parameters
   if (category) {
-      filter.category = category;
+    filter.category = category;
   }
 
-  // Get all products with category filtering and populated fields
-  const productList = await Product.find(filter)
+  // Price filtering
+  if (minPrice || maxPrice) {
+    filter.price = {};
+
+    if (minPrice) {
+      filter.price.$gte = parseFloat(minPrice);
+    }
+
+    if (maxPrice) {
+      filter.price.$lte = parseFloat(maxPrice);
+    }
+  }
+
+  // Rating filtering
+  if (rating) {
+    filter.rating = { $eq: parseFloat(rating) };
+  }
+
+  try {
+    // Get all products with category filtering and populated fields
+    const productList = await Product.find(filter)
       .populate("category")
       .populate("subCat")
       .limit(15);
 
-  // Check if products were found
-  if (!productList || productList.length === 0) {
-      return res.status(404).json({ productList: "", message: "Products Not Found" });
-  }
+    // Check if products were found
+    if (!productList || productList.length === 0) {
+      return res.status(404).json({ productList: [], message: "Products Not Found" });
+    }
 
-  return res.status(200).json({ productList, message: "Get All Products" });
+    return res.status(200).json({ productList, message: "Get All Products" });
+  } catch (error) {
+    console.error('Error fetching products:', error);
+    return res.status(500).json({ message: 'Error fetching products' });
+  }
 });
 
 
+/**
+ * @DESC GET ALL RELATED PRODUCT 
+ * @METHOD GET
+ * @ROUTE /api/v1/product/related-product
+ * @ACCESS PUBLIC 
+ * 
+ */
+export const getRelatedProducts = asyncHandler(async (req, res) => {
+  const { category, excludeProductId } = req.query;
 
-// export const getAllProducts =  asyncHandler(async(req, res) => {
+  const filter = {};
 
-//     // Get all products with populated fields
-//     const productList = await Product.find().populate("category").populate("subCat").limit(12);
+  // Extract category filter from query parameters
+  if (category) {
+    filter.category = category;
+  }
 
-//       // check product 
-//       if (!productList) {
-//         return res.status(404).json({ productList : "", message : "Products Not Found"});
-//       }; 
-  
-//     return res.status(200).json({ productList, message : "Get All Products"});
-// }); 
+  // Exclude the product by ID
+  if (excludeProductId) {
+    filter._id = { $ne: excludeProductId };
+  }
+
+  try {
+    const relatedProducts = await Product.find(filter)
+      .populate("category")
+      .populate("subCat")
+      .limit(15);
+
+    // Check if products were found
+    if (!relatedProducts || relatedProducts.length === 0) {
+      return res.status(404).json({ relatedProducts: [], message: "No related products found" });
+    }
+
+    return res.status(200).json({ relatedProducts, message: "Related products fetched successfully" });
+  } catch (error) {
+    console.error('Error fetching related products:', error);
+    return res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 
 /**
