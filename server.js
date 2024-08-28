@@ -13,9 +13,11 @@ import productRouter from "./routes/product.js";
 import productRamRouter from "./routes/productRam.js";
 import productSizeRouter from "./routes/productSize.js";
 import productWeightRouter from "./routes/productWeight.js";
+import userRouter from "./routes/user.js";
 
 import cors from "cors";
 import bodyParser from "body-parser";
+import cookieParser from 'cookie-parser';
 
 // enviroment variable
 dotenv.config();
@@ -36,6 +38,8 @@ app.use(cors({
   credentials : true,
 }));
 
+// use cookie parser 
+app.use(cookieParser());
 
 // static folder 
 app.use(express.static("public"));
@@ -48,9 +52,11 @@ app.use("/api/v1/subCategory", subCategoryRouter);
 app.use("/api/v1/productRam", productRamRouter); 
 app.use("/api/v1/productSize", productSizeRouter); 
 app.use("/api/v1/productWeight", productWeightRouter); 
+app.use("/api/v1/user", userRouter); 
 
 // error handler 
 app.use(errorHandler); 
+
 
 // listen server
 app.listen(PORT, () => {

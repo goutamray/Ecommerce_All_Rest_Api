@@ -1,5 +1,4 @@
 
-
 import mongoose from "mongoose";
 
 // create brand schema 
