@@ -1,16 +1,8 @@
 
-
 import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import { 
-        fileDeleteFromCloud, 
-        fileUploadToCloud 
-      } from "../utilis/cloudinary.js";
-import { findPublicId } from "../helpers/helpers.js";
-
-
 
 /**
  * @DESC  GET ALL USERS
@@ -58,7 +50,7 @@ export const getSingleUser= asyncHandler(async(req, res) => {
 /**
  * @DESC CREATE USER
  * @METHOD POST
- * @ROUTE /api/v1/user
+ * @ROUTE /api/v1/user/signup
  * @ACCESS PUBLIC 
  * 
  */
@@ -116,7 +108,7 @@ export const createUser = asyncHandler(async (req, res) => {
 /**
  * @DESC LOGIN USER
  * @METHOD POST
- * @ROUTE /api/v1/user
+ * @ROUTE /api/v1/user/login
  * @ACCESS PUBLIC 
  * 
  */
@@ -127,7 +119,7 @@ export const loginUser = asyncHandler(async (req, res) => {
     // Check user
     const existingUser = await User.findOne({ email: email });
     if (!existingUser) {
-      return res.status(404).json({ message: "User not found" });
+      return res.status(404).json({ message: "Email User not found" });
     }
 
     // Check password
@@ -135,7 +127,7 @@ export const loginUser = asyncHandler(async (req, res) => {
 
     // Password validation
     if (!isPasswordValid) {
-      return res.status(401).json({ message: "Invalid credentials" });
+      return res.status(401).json({ message: "Invalid Password" });
     }
 
     // Create login user token

@@ -14,6 +14,7 @@ import productRamRouter from "./routes/productRam.js";
 import productSizeRouter from "./routes/productSize.js";
 import productWeightRouter from "./routes/productWeight.js";
 import userRouter from "./routes/user.js";
+import cartRouter from "./routes/cart.js";
 
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -38,11 +39,12 @@ app.use(cors({
   credentials : true,
 }));
 
-// use cookie parser 
-app.use(cookieParser());
 
 // static folder 
 app.use(express.static("public"));
+
+// use cookie parser 
+app.use(cookieParser());
 
 // routes 
 app.use("/api/v1/category", categoryRouter); 
@@ -53,6 +55,7 @@ app.use("/api/v1/productRam", productRamRouter);
 app.use("/api/v1/productSize", productSizeRouter); 
 app.use("/api/v1/productWeight", productWeightRouter); 
 app.use("/api/v1/user", userRouter); 
+app.use("/api/v1/cart", cartRouter); 
 
 // error handler 
 app.use(errorHandler); 
