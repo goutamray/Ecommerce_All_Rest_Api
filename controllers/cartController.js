@@ -30,26 +30,40 @@ export const getAllCart = asyncHandler(async(req, res) => {
  * @ACCESS PUBLIC 
  * 
  */
-export const createCart = asyncHandler(async(req, res) => {
-  // get form data 
+export const createCart = asyncHandler(async (req, res) => {
+  // Get form data from request body
   const { productTitle, image, rating, price, quantity, subTotal, productId, userId } = req.body;
 
+  try {
+    // Check if the product is already in the cart for the current user
+    const existingCart = await Cart.findOne({ productId });
 
-    // create new cart 
-     const cart = await Cart.create({ 
-         productTitle, 
-         image, 
-         rating, 
-         price, 
-         quantity, 
-         subTotal, 
-         productId, 
-         userId
-       });
+    if (existingCart) {
+      // Product already in the cart
+      return res.status(400).json({ status: false, message: "Product Already Added" });
+    }
 
-    // save data 
-    return res.status(201).json({ cart , message : "Cart Created Successfull"})
-})
+    // Create a new cart item
+    const cart = await Cart.create({ 
+      productTitle, 
+      image, 
+      rating, 
+      price, 
+      quantity, 
+      subTotal, 
+      productId, 
+      userId
+    });
+
+    // Send a success response
+    return res.status(201).json({status: true, cart, message: "Cart Created Successfully" });
+
+  } catch (error) {
+    // Handle server errors
+    console.error("Error creating cart:", error);
+    return res.status(500).json({ message: "Server Error" });
+  }
+});
 
 
 /**
@@ -108,17 +122,6 @@ export const updateCart = asyncHandler(async(req, res) => {
 
    return res.status(200).json({ cartUpdate,  message : "Cart Updated Successfull"}); 
 });  
-
-
-
-
-
-
-
-
-
-
-
 
 
 
