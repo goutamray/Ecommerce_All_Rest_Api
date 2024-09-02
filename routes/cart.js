@@ -11,10 +11,10 @@ import {
 const router = express.Router(); 
 
 // routes 
-router.post("/add", createCart);    // create cart
-router.get("/", getAllCart);        // get all cart    // cart count
-router.delete("/:id", deleteCart);  // delete cart
-router.patch("/:id", updateCart);  // update cart 
+router.post("/add", createCart);   
+router.get("/", getAllCart);       
+router.delete("/:id", deleteCart);  
+router.patch("/:id", updateCart);  
 
 
 // export default router 

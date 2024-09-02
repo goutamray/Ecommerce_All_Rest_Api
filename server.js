@@ -16,6 +16,7 @@ import productWeightRouter from "./routes/productWeight.js";
 import userRouter from "./routes/user.js";
 import cartRouter from "./routes/cart.js";
 import reviewRouter from "./routes/review.js";
+import wishlistRouter from "./routes/wishList.js";
 
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -58,6 +59,7 @@ app.use("/api/v1/productWeight", productWeightRouter);
 app.use("/api/v1/user", userRouter); 
 app.use("/api/v1/cart", cartRouter); 
 app.use("/api/v1/review", reviewRouter); 
+app.use("/api/v1/wishlist", wishlistRouter); 
 
 // error handler 
 app.use(errorHandler); 

@@ -36,7 +36,7 @@ export const createCart = asyncHandler(async (req, res) => {
 
   try {
     // Check if the product is already in the cart for the current user
-    const existingCart = await Cart.findOne({ productId });
+    const existingCart = await Cart.findOne({ productId : req.body.productId, userId : req.body.userId });
 
     if (existingCart) {
       // Product already in the cart
