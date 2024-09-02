@@ -15,6 +15,7 @@ import productSizeRouter from "./routes/productSize.js";
 import productWeightRouter from "./routes/productWeight.js";
 import userRouter from "./routes/user.js";
 import cartRouter from "./routes/cart.js";
+import reviewRouter from "./routes/review.js";
 
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -56,6 +57,7 @@ app.use("/api/v1/productSize", productSizeRouter);
 app.use("/api/v1/productWeight", productWeightRouter); 
 app.use("/api/v1/user", userRouter); 
 app.use("/api/v1/cart", cartRouter); 
+app.use("/api/v1/review", reviewRouter); 
 
 // error handler 
 app.use(errorHandler); 
