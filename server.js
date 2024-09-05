@@ -19,6 +19,7 @@ import reviewRouter from "./routes/review.js";
 import wishlistRouter from "./routes/wishList.js";
 import orderRouter from "./routes/order.js";
 import sliderRouter from "./routes/slider.js";
+import searchRouter from "./routes/search.js";
 
 import cors from "cors";
 import bodyParser from "body-parser";
@@ -64,6 +65,7 @@ app.use("/api/v1/review", reviewRouter);
 app.use("/api/v1/wishlist", wishlistRouter); 
 app.use("/api/v1/order", orderRouter); 
 app.use("/api/v1/slider", sliderRouter); 
+app.use("/api/v1/search", searchRouter); 
 
 // error handler 
 app.use(errorHandler); 
