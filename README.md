@@ -8,6 +8,12 @@
 5.Product Rams Rest Api    
 6.Product Size Rest Api     
 7.Product Weight Rest Api    
+8.Product Review Rest Api    
+9.Product Slider Rest Api    
+10.Product Cart Rest Api    
+11.Product Wishlist Rest Api    
+12.Product order Rest Api    
+13.Product User Rest Api    
 
 
 ## Requirements

@@ -42,7 +42,10 @@ const orderSchema = mongoose.Schema({
   },
   products : [
     {
-      productName : {
+      productId : {
+        type : String,
+      },
+      productTitle : {
         type : String,
       },
       quantity : {
@@ -54,12 +57,18 @@ const orderSchema = mongoose.Schema({
       image : {
         type : String,
       },
-      total : {
+      subTotal : {
         type : Number,
       }
     }
-  ]
+  ],
+  status : {
+    type : String,
+    enum : ["Pending", "Completed", "Canceled"],
+    default : "Pending"
+  }
 },
+
 {
   timestamps : true,
 })

@@ -15,5 +15,6 @@ export const productPhotoMulter = multer({ storage }).array("photo", 10);
 export const subCategoryPhotoMulter = multer({ storage }).single("photo");
 
 export const userPhotoMulter = multer({ storage }).single("photo");
+export const sliderPhotoMulter = multer({ storage }).single("photo");
 
 
