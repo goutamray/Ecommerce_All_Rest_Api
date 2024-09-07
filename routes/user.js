@@ -8,7 +8,7 @@ import {
   updateUser, 
   loginUser,
   countUser,
-  changePassword
+  changePassword,
 } from "../controllers/userController.js";
  //import verifyAccessToken from "../middlewares/verifyToken.js";
 import { userPhotoMulter } from "../utilis/multer.js";
@@ -27,6 +27,7 @@ router.delete("/:id", deleteUser);
 router.patch("/:id", userPhotoMulter, updateUser);
 
 router.patch('/changePassword/:id', changePassword);
+
 
 
 // export default router 
