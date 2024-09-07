@@ -14,17 +14,15 @@ const userSchema = mongoose.Schema({
   email : {
     type: String,
     trim : true,
-    unique : true,
   },
   password : {
     type: String,
     trim : true,
   },
   photo : {
-    type : String,
-    trim : true,
-    default : null,
-  },
+      type : String,
+      default : null,
+    }
 },
 {
   timestamps : true,
@@ -32,7 +30,6 @@ const userSchema = mongoose.Schema({
 
 //export default 
 export default mongoose.model("User", userSchema);
-
 
 
 

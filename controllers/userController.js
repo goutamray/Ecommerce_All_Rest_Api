@@ -3,6 +3,8 @@ import asyncHandler from "express-async-handler";
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { fileDeleteFromCloud, fileUploadToCloud } from "../utilis/cloudinary.js";
+import { findPublicId } from "../helpers/helpers.js";
 
 /**
  * @DESC  GET ALL USERS
@@ -22,6 +24,7 @@ export const getAllUsers= asyncHandler(async(req, res) => {
 
 return res.status(200).json({ userList, message : "Get All Users"});
 });
+
 
 
 /**
@@ -54,6 +57,7 @@ export const getSingleUser= asyncHandler(async(req, res) => {
  * @ACCESS PUBLIC 
  * 
  */
+
 export const createUser = asyncHandler(async (req, res) => {
   const { name, email, phone, password } = req.body;
 
@@ -62,44 +66,59 @@ export const createUser = asyncHandler(async (req, res) => {
     return res.status(400).json({ message: "All fields are required" });
   }
 
-   // Check email user
-  const existingUser = await User.findOne({ email: email });
+  // Check if email already exists
+  const existingUser = await User.findOne({ email });
   if (existingUser) {
     return res.status(400).json({ message: "Email already exists" });
   }
 
-  // Check phone user
-  const checkPhoneUser = await User.findOne({ phone: phone });
+  // Check if phone number already exists
+  const checkPhoneUser = await User.findOne({ phone });
   if (checkPhoneUser) {
     return res.status(400).json({ message: "Phone number already exists" });
-  };
+  }
 
-  // Hash password
+  // Hash the password
   const hashedPassword = await bcrypt.hash(password, 10);
 
+  // Handle file upload
+  let filedata = null;
+  if (req.file) {
+    try {
+      const data = await fileUploadToCloud(req.file.path);
+      filedata = data.secure_url;
+    } catch (error) {
+      return res.status(500).json({ message: "Error uploading file" });
+    }
+  }
+
   // Create user
-  const user = await User.create({
-    name,
-    email,
-    phone,
-    password: hashedPassword,
-  });
+  try {
+    const user = await User.create({
+      name,
+      email,
+      phone,
+      password: hashedPassword,
+      photo: filedata,
+    });
 
-  if (user) {
-    const token = jwt.sign(
-      { id: user._id, email },
-      process.env.ACCOUNT_ACTIVATION_SECRET,
-      { expiresIn: "60m" }
-    );
+    if (user) {
+      const token = jwt.sign(
+        { id: user._id, email },
+        process.env.ACCOUNT_ACTIVATION_SECRET,
+        { expiresIn: "60m" }
+      );
 
-     // Send token in cookie 
-    res.cookie("accessToken", token, { httpOnly: true });
+      // Set token in cookie
+      res.cookie("accessToken", token, { httpOnly: true });
 
-    // Respond with success
-    return res.status(201).json({ user, message: "User created successfully", token });
-
-  } else {
-    // Handle user creation failure
+      // Respond with success
+      return res.status(201).json({ user, message: "User created successfully", token });
+    } else {
+      return res.status(500).json({ message: "Error creating user" });
+    }
+  } catch (error) {
+    console.error("Error creating user:", error.message);
     return res.status(500).json({ message: "Error creating user" });
   }
 });
@@ -172,10 +191,14 @@ export const deleteUser= asyncHandler(async(req, res) => {
    if (!user) {
     res.status(404).json({ message : "User Not Found"});
    }
+  
+  // delete cloud file
+  await fileDeleteFromCloud(findPublicId(user.photo)); 
 
    // delete data 
    res.status(200).json({ user, message : "User deleted successfull"});
 });
+
 
 
 /**
@@ -187,7 +210,7 @@ export const deleteUser= asyncHandler(async(req, res) => {
  */
 export const updateUser = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const { name, email, phone, password } = req.body;
+  const { name, email, phone } = req.body;
 
   try {
     const existingUser = await User.findById(id);
@@ -197,30 +220,32 @@ export const updateUser = asyncHandler(async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    let updatedPassword;
-    if (password) {
-      updatedPassword = await bcrypt.hash(password, 10);
-    } else {
-      updatedPassword = existingUser.password;
+    // Handle photo upload if file is provided
+    let filedata = existingUser.photo;  // Keep existing photo if no new file is uploaded
+    if (req.file) {
+      const data = await fileUploadToCloud(req.file.path); // Upload new photo
+      filedata = data.secure_url;  // Update filedata with new uploaded photo URL
     }
 
+    // Update user data
     const updatedUser = await User.findByIdAndUpdate(
       id,
       {
-        name: name || existingUser.name,
-        email: email || existingUser.email,
-        phone: phone || existingUser.phone,
-        password: updatedPassword
+        name: name || existingUser.name,     // Use new name or keep the old one
+        email: email || existingUser.email,  // Use new email or keep the old one
+        phone: phone || existingUser.phone,  // Use new phone or keep the old one
+        photo: filedata,  // Use the updated photo URL or keep the existing one
       },
-      { new: true }
+      { new: true }  // Return the updated user document
     );
 
-    res.status(200).json({ user: updatedUser, message: "User data updated successfully" });
+    res.status(200).json({ updatedUser, message: "User data updated successfully" });
   } catch (error) {
     console.error('Error updating user:', error);
     res.status(500).json({ message: "Server Error", error: error.message });
   }
 });
+
 
 /**
  * @DESC COUNT USER
@@ -229,7 +254,6 @@ export const updateUser = asyncHandler(async (req, res) => {
  * @ACCESS PUBLIC 
  * 
  */
-
 export const countUser = asyncHandler(async (req, res) => {
   try {
     const userCount = await User.countDocuments(); 
@@ -246,6 +270,42 @@ export const countUser = asyncHandler(async (req, res) => {
 });
 
 
+/**
+ * @DESC CHANGE PASSWORD
+ * @METHOD GET
+ * @ROUTE /api/v1/user/changePassword
+ * @ACCESS PUBLIC 
+ * 
+ */
+export const changePassword = async (req, res) => {
+  try {
+    const { oldPassword, newPassword } = req.body;
+    const { id } = req.params;
+
+    if (!oldPassword || !newPassword) {
+      return res.status(400).json({ message: "Both old and new passwords are required" });
+    }
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const isPasswordMatch = await bcrypt.compare(oldPassword, user.password);
+    if (!isPasswordMatch) {
+      return res.status(400).json({ message: "Old password is incorrect" });
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    return res.status(200).json({ message: "Password updated successfully" });
+  } catch (error) {
+    console.error("Error changing password:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
 
 
 
