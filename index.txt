@@ -9,7 +9,12 @@
 
 PORT = 5050
 APP_ENV = Development 
-MONGO_URL = mongodb://127.0.0.1:27017/ecommerce
+MONGO_URL = mongodb+srv://devgoutam2053:VgSrfh8rgOsZEOP8@ecommerce.yknbo.mongodb.net/ecommerceWebsite?retryWrites=true&w=majority&appName=ecommerce
 
 
+database name : exommerce 
+pass : VgSrfh8rgOsZEOP8
+
+
+compass : mongodb+srv://devgoutam2053:VgSrfh8rgOsZEOP8@ecommerce.yknbo.mongodb.net/
 
